@@ -49,20 +49,31 @@ while y1[i] != '':
     store[z[2]]+=z
     for j in range(len(z)):
         a=hash_function(z[j])
-        sale_dic[sale[j]][a].append(z[0])
+        sale_dic[sale[j]][a].append(z[2])
     i+=1
        
-    
+#print(store)
+
+
 for i in book_dic:
-    file=open((i+'.txt'),'w',encoding='UTF-8')
+    file=open(('books_'+i+'.txt'),'w',encoding='UTF-8')
     for x in book_dic[i]:
-        file.write(str(x)+"：")
+        file.write("Bucket"+str(x)+"：")
         for y in book_dic[i][x]:
-            file.write(str(y)+" ")
+            file.write(str(y)+'：'+store[y][book.index(i)]+", ")
         file.write("\n")
 
+for i in sale_dic:
+    file=open(('sellRecord_'+i+'.txt'),'w',encoding='UTF-8')
+    for x in sale_dic[i]:
+        file.write("Bucket"+str(x)+"：")
+        for y in sale_dic[i][x]:
+            file.write(str(y)+'：'+store[y][sale.index(i)+5]+", ")
+        file.write("\n")
+
+
 #print (book_dic)
-#print(store)
+
 
 file.close()
 
