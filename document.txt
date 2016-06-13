@@ -1,0 +1,5 @@
+使用python
+
+先讀取資料
+分到hash table
+要抓取再到hash table抓
