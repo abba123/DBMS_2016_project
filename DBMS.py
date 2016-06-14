@@ -35,6 +35,7 @@ del y[0]
 del y1[0]
 
 i=0
+
 while y[i] != '':
     z=y[i].split('|')
     j=0
@@ -120,7 +121,10 @@ while True:
             where_ans1=where_ans
             input_where1=input_where
 
-
+        #print(where_ans)
+        #print(where_ans1)
+    
+        
         if input_where==input_where1 and where_ans==where_ans1:
             where_ans=where_ans.strip()
             where[input_where]=[]
@@ -145,7 +149,6 @@ while True:
         for y in where:
             if y in book_dic:
                 for i in where[y]:
-                    print(i)
                     if i in book_dic:
                         for x in range(10):
                             for z in book_dic[i][x]:
@@ -194,7 +197,7 @@ while True:
                         if dis == True:
                             output_dis[x]=[]
                         else:
-                            print(x)
+                            print('\n'+x+'：')
                         for a in hash_ID:
                             if dis == True:
                                 output_dis[x].append(store[a][attribute.index(x)])
@@ -207,7 +210,7 @@ while True:
                         if dis == True:
                             output_dis[x]=[]
                         else:
-                            print(x)
+                            print('\n'+x+'：')
                         for a in hash_ID:
                             if dis == True:
                                 output_dis[x](store[a][attribute.index(x)])
@@ -225,7 +228,7 @@ while True:
                         if dis == True:
                             output_dis[book[count]]=[]
                         else:
-                             print(book[count])
+                             print('\n'+book[count]+'：')
                         for z in store:
                             if dis == True:
                                 output_dis[book[count]].append(store[z][count])
@@ -238,7 +241,7 @@ while True:
                             if dis == True:
                                 output_dis[a]=[]
                             else:
-                                print(a)
+                                print('\n'+a+'：')
                             for z in store:
                                 if dis == True:
                                     output_dis[a].append(store[z][index])
@@ -251,7 +254,7 @@ while True:
                          if dis == True:
                                     output_dis[sale[count]]=[]
                          else:
-                             print(sale[count])
+                             print('\n'+sale[count]+'：')
                          for z in store:
                              if len(store[z]) > 5:
                                  if dis == True:
@@ -263,6 +266,12 @@ while True:
                                      output_dis[sale[count]].append(store[z][count+8])
                                  else:
                                      print(store[z][count+8])
+                             if len(store[z]) > 11:
+                                 if dis == True:
+                                     output_dis[sale[count]].append(store[z][count+11])
+                                 else:
+                                     print(store[z][count+11])
+                                    
                  else:
                      for a in input_select:
                          if a in sale:
@@ -270,7 +279,7 @@ while True:
                              if dis == True:
                                     output_dis[a]=[]
                              else:
-                                 print (a)
+                                 print ('\n'+a+'：')
                              for z in store:
                                 if len(store[z]) > 5:
                                     if dis == True:
@@ -279,16 +288,21 @@ while True:
                                         print(store[z][index+5])
                                 if len(store[z]) > 8:
                                     if dis == True:
-                                        output_dis[sale[count]].append(store[z][count+8])
+                                        output_dis[sale[index]].append(store[z][index+8])
                                     else:
-                                        print(store[z][count+8])
+                                        print(store[z][index+8])
+                                if len(store[z]) > 11:
+                                    if dis == True:
+                                        output_dis[sale[index]].append(store[z][index+11])
+                                    else:
+                                        print(store[z][index+11])
     #print(output_dis)
 
 
     for i in output_dis:
         output=list(set(output_dis[i]))
         output.sort(key=output_dis[i].index)
-        print (i)
+        print ('\n'+i+'：')
         for i in range(len(output)):
             print (output[i])
 
