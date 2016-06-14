@@ -43,7 +43,7 @@ while y[i] != '':
         a=hash_function(z[j])
         book_dic[book[j]][a].append(z[0])
     i+=1
-    
+
 i=0
 while y1[i] != '':
     z=y1[i].split('|')
@@ -53,7 +53,7 @@ while y1[i] != '':
         a=hash_function(z[j])
         sale_dic[sale[j]][a].append(z[2])
     i+=1
-       
+
 #print(store)
 
 
@@ -87,23 +87,26 @@ while True:
     where_ans1=''
     where={}
     dis=False
+
+    while sql.count('') !=0:
+        sql.remove('')
     print (sql)
 
     if sql[1] == 'DISTINCT':
         del sql[1]
         dis=True
-    output_dis=[]
-    
+    output_dis={}
+
     input_select=sql[1]
     input_from=sql[3]
 
     #處理table
     if len(sql)!=4:
         input_where=sql[5]
-        
+
         input_from=input_from.split(',')
         input_select=input_select.split(',')
-        
+
         for i in range(7,len(sql)):
             if sql[i] == 'AND':
                 where_ans1=''
@@ -116,62 +119,102 @@ while True:
             where_ans+=" "
             where_ans1=where_ans
             input_where1=input_where
-            
-        where_ans=where_ans.strip()
-        where_ans1=where_ans1.strip()
-        
-        where[input_where]=where_ans
-        where[input_where1]=where_ans1
-                
+
+
+        if input_where==input_where1 and where_ans==where_ans1:
+            where_ans=where_ans.strip()
+            where[input_where]=[]
+            where[input_where].append(where_ans)
+        else:
+            where_ans=where_ans.strip()
+            where_ans1=where_ans1.strip()
+
+            where[input_where]=[]
+            where[input_where1]=[]
+
+            where[input_where].append(where_ans)
+            where[input_where1].append(where_ans1)
+
+
+
+        print(where)
+
         hash_ID=[]
         ID=[]
-        
+
         for y in where:
             if y in book_dic:
-                for x in book_dic[y][hash_function(where[y])]:
-                    if store[x][attribute.index(y)] == where[y]:
-                        hash_ID.append(x)
+                for i in where[y]:
+                    print(i)
+                    if i in book_dic:
+                        for x in range(10):
+                            for z in book_dic[i][x]:
+                                if z in book_dic[y][x] and z not in hash_ID:
+                                    hash_ID.append(z)
+                    elif i in sale_dic:
+                        for x in range(10):
+                            for z in sale_dic[i][x]:
+                                if z in book_dic[y][x] and z not in hash_ID:
+                                    hash_ID.append(z)
+                    else:
+                        for x in book_dic[y][hash_function(i)]:
+                            if store[x][attribute.index(y)] == i:
+                                hash_ID.append(x)
             if y in sale_dic:
-                for x in sale_dic[y][hash_function(where[y])]:
-                    if store[x][attribute.index(y)] == where[y]:
-                        hash_ID.append(x)
+                for i in where[y]:
+                    if i in book_dic:
+                        for x in range(10):
+                            for z in book_dic[i][x]:
+                                if z in sale_dic[y][x] and z not in hash_ID:
+                                    hash_ID.append(z)
+                    elif i in sale_dic:
+                        for x in range(10):
+                            for z in sale_dic[i][x]:
+                                if z in sale_dic[y][x] and z not in hash_ID:
+                                    hash_ID.append(z)
+                    else:
+                        for x in sale_dic[y][hash_function(i)]:
+                            if store[x][attribute.index(y)] == i:
+                                hash_ID.append(x)
 
-        for x in hash_ID:
-            if hash_ID.count(x) > 1:
-                ID.append(x)
-        
-        hash_ID=list(set(ID))
+
+        if input_where!=input_where1:
+            for x in hash_ID:
+                if hash_ID.count(x) > 1:
+                    ID.append(x)
+
+            hash_ID=list(set(ID))
         #print(ID)
         print(hash_ID)
-                     
+
         for y in input_from:
             if y == 'books':
                 for x in input_select:
                     if x in book:
                         if dis == True:
-                            output_dis.append(x)
+                            output_dis[x]=[]
                         else:
                             print(x)
                         for a in hash_ID:
                             if dis == True:
-                                output_dis.append(store[a][attribute.index(x)])
+                                output_dis[x].append(store[a][attribute.index(x)])
                             else:
                                 print(store[a][attribute.index(x)])
-                    
+
             if y == 'sellRecord':
                 for x in input_select:
                     if x in sale:
                         if dis == True:
-                            output_dis.append(x)
+                            output_dis[x]=[]
                         else:
                             print(x)
                         for a in hash_ID:
                             if dis == True:
-                                output_dis.append(store[a][attribute.index(x)])
+                                output_dis[x](store[a][attribute.index(x)])
                             else:
                                 print(store[a][attribute.index(x)])
-                
-            
+
+
     if len(sql)==4:
         input_from=input_from.split(',')
         input_select=input_select.split(',')
@@ -180,12 +223,12 @@ while True:
                 if input_select[0] == '*':
                     for count in range(5):
                         if dis == True:
-                            output_dis.append(book[count])
+                            output_dis[book[count]]=[]
                         else:
                              print(book[count])
                         for z in store:
                             if dis == True:
-                                output_dis.append(store[z][count])
+                                output_dis[book[count]].append(store[z][count])
                             else:
                                 print (store[z][count])
                 else:
@@ -193,31 +236,31 @@ while True:
                         if a in book:
                             index=book.index(a)
                             if dis == True:
-                                output_dis.append(a)
+                                output_dis[a]=[]
                             else:
                                 print(a)
                             for z in store:
                                 if dis == True:
-                                    output_dis.append(store[z][index])
+                                    output_dis[a].append(store[z][index])
                                 else:
                                     print(store[z][index])
-                                
+
             if y == 'sellRecord':
                  if input_select[0] == '*':
                      for count in range(3):
                          if dis == True:
-                                    output_dis.append(sale[count])
+                                    output_dis[sale[count]]=[]
                          else:
                              print(sale[count])
                          for z in store:
                              if len(store[z]) > 5:
                                  if dis == True:
-                                     output_dis.append(store[z][count+5])
+                                     output_dis[sale[count]].append(store[z][count+5])
                                  else:
                                      print(store[z][count+5])
                              if len(store[z]) > 8:
                                  if dis == True:
-                                     output_dis.append(store[z][count+8])
+                                     output_dis[sale[count]].append(store[z][count+8])
                                  else:
                                      print(store[z][count+8])
                  else:
@@ -225,32 +268,34 @@ while True:
                          if a in sale:
                              index=sale.index(a)
                              if dis == True:
-                                    output_dis.append(a)
+                                    output_dis[a]=[]
                              else:
                                  print (a)
                              for z in store:
                                 if len(store[z]) > 5:
                                     if dis == True:
-                                        output_dis.append(store[z][index])
+                                        output_dis[a].append(store[z][index+5])
                                     else:
-                                        print(store[z][index])
-
+                                        print(store[z][index+5])
+                                if len(store[z]) > 8:
+                                    if dis == True:
+                                        output_dis[sale[count]].append(store[z][count+8])
+                                    else:
+                                        print(store[z][count+8])
     #print(output_dis)
-    
-    output=list(set(output_dis))
 
-    
-    
-    output.sort(key=output_dis.index)
-    print(output)
-    for i in range(len(output)):
-        print (output[i])
-    
-    
-        
-            
+
+    for i in output_dis:
+        output=list(set(output_dis[i]))
+        output.sort(key=output_dis[i].index)
+        print (i)
+        for i in range(len(output)):
+            print (output[i])
+
+
+
+
 #print (book_dic)
 
 
 file.close()
-
